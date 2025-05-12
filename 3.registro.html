@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Registro - Pindaré</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.registro-container {
+    width: 400px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    border: 2px solid #2b5129;
+}
+input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+.btn {
+    background-color: #2b5129;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.btn:hover {
+    background-color: #1f3d1f;
+}
+.error {
+    color: red;
+    margin-top: 10px;
+}
+img {
+    width: 200px;
+    margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+<div class="registro-container">
+    <img src="PINDARE.png" alt="Logo Pindaré">
+    <input type="email" id="email" placeholder="Correo electrónico" required />
+    <input type="password" id="password" placeholder="Contraseña" required />
+    <button class="btn" onclick="registrar()">Registrar</button>
+    <p id="error" class="error"></p>
+    <br>
+    <a href="2.login.html">¿Ya tenés cuenta? Iniciar sesión</a>
+</div>
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+<script>
+// Inicializar Supabase
+const supabaseUrl = 'https://ijxhqedjjbcynclultsh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlqeGhxZWRqamJjeW5jbHVsdHNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0NDg3NjcsImV4cCI6MjA2MjAyNDc2N30.DneTKuG4TWk_zH3uhQleJgrk_TZ88hFKpSBMfOexQcI';
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+// Función de registro
+async function registrar() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorElement = document.getElementById('error');
+
+    errorElement.textContent = "";
+
+    try {
+        const { data, error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password
+        });
+
+        console.log("Respuesta de Supabase:", data, error);
+
+        if (error) {
+            errorElement.textContent = error.message;
+        } else {
+            alert("Registro exitoso. Revisá tu correo si se requiere confirmación.");
+            window.location.href = "login.html";
+        }
+    } catch (err) {
+        console.error("Error al registrar usuario:", err);
+        errorElement.textContent = "Hubo un error al intentar registrar el usuario. Intenta de nuevo.";
+    }
+}
+</script>
+</body>
+</html>
